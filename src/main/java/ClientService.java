@@ -7,10 +7,10 @@ import java.util.Random;
 
 /**
  * @projectName: Project
- * @package: POJO
+ * @package:
  * @className: clientService
  * @author: xjm
- * @description: client Service
+ * @description: 客户端服务类
  * @date: 2024/5/19 13:11
  * @version: 1.0
  */
@@ -22,7 +22,13 @@ public class ClientService {
 
     private BigInteger w1; //w*
     private BigInteger r;
-
+    /**
+     * @param : null
+     * @return null
+     * @author xjm
+     * @description 构造方法
+     * @date 2024/5/21 21:30
+     */
     public ClientService(){
         //生成秘密参数 和 密钥对
         this.clientSecretParameterBean = initClientSecretParameter();
@@ -50,7 +56,7 @@ public class ClientService {
      * @param : null
      * @return ClientSecretParameterBean
      * @author xjm
-     * @description generate client secret parameters and key pair
+     * @description 生成随即参数和 公私钥对
      * @date 2024/5/20 19:48
      */
     private ClientSecretParameterBean initClientSecretParameter(){
@@ -68,7 +74,7 @@ public class ClientService {
         return clientSecretParameterBean;
     }
     /**
-     * @param :
+     * @param : null
      * @return ClientKnowledgeCommitmentOneBean
      * @author xjm
      * @description 计算知识承诺j1 j2
@@ -96,7 +102,7 @@ public class ClientService {
      * @param :
      * @return ClientKnowledgeSignatureOneBean
      * @author xjm
-     * @description 计算spk1
+     * @description 计算 知识签名（c,s1,s2...）
      * @date 2024/5/20 23:26
      */
     private ClientKnowledgeSignatureBean caculateKnowledgeSignature() {
@@ -157,6 +163,13 @@ public class ClientService {
         clientKnowledgeSignatureBean.setS(sList);
         return clientKnowledgeSignatureBean;
     }
+    /**
+     * @param :
+     * @return ClientParameterToServerOneBean
+     * @author xjm
+     * @description 打包 PKu （J1，J2）,(c,s1,s2...)
+     * @date 2024/5/21 21:32
+     */
     public ClientParameterToServerOneBean prepareParameterClientoServerOne(){
         ClientParameterToServerOneBean clientParameterToServerOneBean = new ClientParameterToServerOneBean();
         clientParameterToServerOneBean.setPku(clientSecretParameterBean.getPku());
@@ -164,7 +177,13 @@ public class ClientService {
         clientParameterToServerOneBean.setClientKnowledgeSignatureOneBean(caculateKnowledgeSignature());
         return clientParameterToServerOneBean;
     }
-
+    /**
+     * @param serverParameterToClientOneBean: （y,t2,A）
+     * @return boolean
+     * @author xjm
+     * @description 第一次知识承诺的验证
+     * @date 2024/5/21 21:33
+     */
     public boolean verifyClientSecretParameterSignature(ServerParameterToClientOneBean serverParameterToClientOneBean){
         BigInteger left = serverParameterToClientOneBean.getA().modPow(serverParameterToClientOneBean.getY(), PublicParams.n);
 //        System.out.println("left:"+left);
@@ -181,7 +200,13 @@ public class ClientService {
         generateClientAnonymousCertificate(serverParameterToClientOneBean);//生成匿名证书
         return left.equals(right);
     }
-
+    /**
+     * @param serverParameterToClientOneBean: y,t2,A）
+     * @return void
+     * @author xjm
+     * @description 生成匿名证书
+     * @date 2024/5/21 21:34
+     */
     private void generateClientAnonymousCertificate(ServerParameterToClientOneBean serverParameterToClientOneBean){
         this.clientAnonymousCertificateBean.setX(clientSecretParameterBean.getX());
         this.clientAnonymousCertificateBean.setS(clientSecretParameterBean.getS());
@@ -193,7 +218,13 @@ public class ClientService {
         this.clientAnonymousCertificateBean.setA(serverParameterToClientOneBean.getA());
         this.clientAnonymousCertificateBean.setY(serverParameterToClientOneBean.getY());
     }
-
+    /**
+     * @param : null
+     * @return ClientKnowledgeCommitmentTwoBean
+     * @author xjm
+     * @description 计算知识承诺(A',T,ic,SN,D)
+     * @date 2024/5/21 21:35
+     */
     private ClientKnowledgeCommitmentTwoBean caculatePartOneKnowledgeCommitment(){
         ClientKnowledgeCommitmentTwoBean  clientKnowledgeCommitmentTwoBean = new ClientKnowledgeCommitmentTwoBean();
         this.w1 = BaseFunction.getRndBigIntger(100);
@@ -236,11 +267,25 @@ public class ClientService {
 
         return clientKnowledgeCommitmentTwoBean;
     }
-
+    /**
+     * @param clientKnowledgeCommitmentTwoBean: (A',T,ic,SN,D)
+     * @param c: 摘要
+     * @return void
+     * @author xjm
+     * @description 计算知识承诺(R1,R2)
+     * @date 2024/5/21 21:36
+     */
     public void caculatePartTwoKnowledgeCommitment(ClientKnowledgeCommitmentTwoBean clientKnowledgeCommitmentTwoBean,BigInteger c){
         clientKnowledgeCommitmentTwoBean.setR1(((clientKnowledgeCommitmentTwoBean.getIc().add(clientAnonymousCertificateBean.getS())).modInverse(PublicParams.q1)).subtract(c.multiply(clientAnonymousCertificateBean.getT1())));
         clientKnowledgeCommitmentTwoBean.setR2(((clientKnowledgeCommitmentTwoBean.getIc().add(clientAnonymousCertificateBean.getT1())).modInverse(PublicParams.q1)).subtract(c.multiply(this.r)));
     }
+    /**
+     * @param clientKnowledgeCommitmentTwoBean:(A',T,ic,SN,D)
+     * @return ClientKnowledgeSignatureBean
+     * @author xjm
+     * @description 计算第二次的知识签名
+     * @date 2024/5/21 21:39
+     */
     private ClientKnowledgeSignatureBean caculateKnowledgeSignature(ClientKnowledgeCommitmentTwoBean clientKnowledgeCommitmentTwoBean){
         ClientKnowledgeSignatureBean clientKnowledgeSignatureBean = new ClientKnowledgeSignatureBean();
         ArrayList<ArrayList<BigInteger>> sList;
@@ -364,15 +409,37 @@ public class ClientService {
         clientKnowledgeSignatureBean.setS(sList);
         return clientKnowledgeSignatureBean;
     }
+    /**
+     * @param :
+     * @return ClientParameterToServerTwoBean
+     * @author xjm
+     * @description 打包 知识承诺 (A',T,ic,SN,D,R1,R2)及其知识签名
+     * @date 2024/5/21 21:41
+     */
     public ClientParameterToServerTwoBean prepareParameterClienToServerTwo(){
         ClientParameterToServerTwoBean clientParameterToServerTwoBean = new ClientParameterToServerTwoBean();
         clientParameterToServerTwoBean.setClientKnowledgeCommitmentTwoBean(this.caculatePartOneKnowledgeCommitment());
         clientParameterToServerTwoBean.setClientKnowledgeSignatureBean(this.caculateKnowledgeSignature(clientParameterToServerTwoBean.getClientKnowledgeCommitmentTwoBean()));
         return  clientParameterToServerTwoBean;
     }
+    /**
+     * @param serverParameterToClientTwoBean: （y',AD）
+     * @param clientKnowledgeCommitmentTwoBean: (A',T,ic,SN,D,R1,R2)
+     * @return boolean
+     * @author xjm
+     * @description 验证  服务器对本次扫码的秘密参数及状态码的签名
+     * @date 2024/5/21 21:42
+     */
     public boolean verifySecretParameterAndStateCodeSignature(ServerParameterToClientTwoBean serverParameterToClientTwoBean,ClientKnowledgeCommitmentTwoBean clientKnowledgeCommitmentTwoBean){
         return serverParameterToClientTwoBean.getAD().modPow(serverParameterToClientTwoBean.getY1(),PublicParams.n).equals(clientKnowledgeCommitmentTwoBean.getD());
     }
+    /**
+     * @param serverParameterToClientTwoBean: （y',AD）
+     * @return void
+     * @author xjm
+     * @description 更新用户匿名证书
+     * @date 2024/5/21 21:44
+     */
     public void updateClientAnonymousCertificate(ServerParameterToClientTwoBean serverParameterToClientTwoBean){
         this.clientAnonymousCertificateBean.setY(serverParameterToClientTwoBean.getY1());
         this.clientAnonymousCertificateBean.setA(serverParameterToClientTwoBean.getAD());

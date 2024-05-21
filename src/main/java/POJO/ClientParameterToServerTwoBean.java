@@ -5,7 +5,7 @@ package POJO;
  * @package: POJO
  * @className: ClientParameterToServerTwoBean
  * @author: xjm
- * @description: TODO
+ * @description: 存放客户端第二次向服务器传递的所有参数,包括（（A',T,ic,SN,D）,(c,s1,s2,s3...)）
  * @date: 2024/5/21 11:05
  * @version: 1.0
  */

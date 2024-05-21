@@ -7,7 +7,7 @@ import java.math.BigInteger;
  * @package: POJO
  * @className: ClientAnonymousCertificateBean
  * @author: xjm
- * @description: POJO for ClientAnonymousCertificate
+ * @description: 存放用户匿名证书
  * @date: 2024/5/19 12:57
  * @version: 1.0
  */

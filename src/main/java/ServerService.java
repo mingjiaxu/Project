@@ -10,7 +10,7 @@ import java.util.Random;
  * @package: PACKAGE_NAME
  * @className: serverService
  * @author: xjm
- * @description:
+ * @description: 服务器端服务类
  * @date: 2024/5/19 13:12
  * @version: 1.0
  */
@@ -71,10 +71,10 @@ public class ServerService {
         return c.equals(clientKnowledgeSignatureBean.getC());
     }
     /**
-     * @param clientParameterToServerOneBean:
+     * @param clientParameterToServerOneBean:(PKu,(j1,j2),(c,s1...))
      * @return ServerParameterToClientOneBean
      * @author xjm
-     * @description TODO
+     * @description 对用户秘密参数进行签名
      * @date 2024/5/20 23:41
      */
     public ServerParameterToClientOneBean signClientSecretParameter(ClientParameterToServerOneBean clientParameterToServerOneBean){
@@ -91,7 +91,13 @@ public class ServerService {
         serverParameterToClientOneBean.setY(y);
         return serverParameterToClientOneBean;
     }
-
+    /**
+     * @param clientParameterToServerTwoBean: 知识承诺（A',T,ic,SN,D）及其签名
+     * @return boolean
+     * @author xjm
+     * @description 验证第二次的知识签名
+     * @date 2024/5/21 21:47
+     */
     public boolean verifyClientParameterToServerTwo(ClientParameterToServerTwoBean clientParameterToServerTwoBean){
 
         ClientKnowledgeCommitmentTwoBean clientKnowledgeCommitmentTwoBean = clientParameterToServerTwoBean.getClientKnowledgeCommitmentTwoBean();
@@ -174,7 +180,13 @@ public class ServerService {
 
         return c.equals(clientKnowledgeSignatureBean.getC());
     }
-
+    /**
+     * @param clientParameterToServerTwoBean: （知识承诺（A',T,ic,SN,D,R1,R2）及其签名
+     * @return boolean
+     * @author xjm
+     * @description 验证SN
+     * @date 2024/5/21 21:46
+     */
     public boolean verifyClientSN(ClientParameterToServerTwoBean clientParameterToServerTwoBean){
         BigInteger c = clientParameterToServerTwoBean.getClientKnowledgeSignatureBean().getC();
         ClientKnowledgeCommitmentTwoBean clientKnowledgeCommitmentTwoBean = clientParameterToServerTwoBean.getClientKnowledgeCommitmentTwoBean();
@@ -184,7 +196,13 @@ public class ServerService {
                 .mod(PublicParams.sigma);
         return temp.equals(clientKnowledgeCommitmentTwoBean.getSN());
     }
-
+    /**
+     * @param clientParameterToServerTwoBean: 知识承诺（A',T,ic,SN,D,R1,R2）及其签名
+     * @return ServerParameterToClientTwoBean
+     * @author xjm
+     * @description 生成(y',AD)
+     * @date 2024/5/21 21:44
+     */
     public ServerParameterToClientTwoBean signSecretParameterAndStateCode(ClientParameterToServerTwoBean clientParameterToServerTwoBean){
         ServerParameterToClientTwoBean serverParameterToClientTwoBean = new ServerParameterToClientTwoBean();
         BigInteger y1 = BigInteger.probablePrime(100,new Random());

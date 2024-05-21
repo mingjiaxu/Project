@@ -7,7 +7,7 @@ import java.math.BigInteger;
  * @package: POJO
  * @className: ClientKnowledgeCommitmentTwoBean
  * @author: xjm
- * @description: TODO
+ * @description: 存放  客户端  第二次  知识承诺  (A',T,ic,SN,D,R1,R2)
  * @date: 2024/5/20 20:12
  * @version: 1.0
  */

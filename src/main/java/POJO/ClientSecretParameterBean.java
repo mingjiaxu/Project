@@ -7,7 +7,7 @@ import java.math.BigInteger;
  * @package: POJO
  * @className: ClientSecretParameterBean
  * @author: xjm
- * @description: POJO for user‘s secret parameters
+ * @description: 存放用户秘密参数和公私钥对
  * @date: 2024/5/19 12:55
  * @version: 1.0
  */

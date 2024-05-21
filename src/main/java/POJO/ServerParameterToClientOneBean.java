@@ -7,7 +7,7 @@ import java.math.BigInteger;
  * @package: POJO
  * @className: ServerParameterToClientOneBean
  * @author: xjm
- * @description: TODO
+ * @description: 存放服务器第一次向服务器传递的所有参数,包括（y,t2,A）
  * @date: 2024/5/20 23:32
  * @version: 1.0
  */

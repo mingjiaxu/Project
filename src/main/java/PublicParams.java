@@ -5,7 +5,7 @@ import java.math.BigInteger;
  * @package: PACKAGE_NAME
  * @className: PublicParams
  * @author: xjm
- * @description: TODO
+ * @description: 服务器初始化生成的系统公共参数
  * @date: 2024/5/20 19:45
  * @version: 1.0
  */

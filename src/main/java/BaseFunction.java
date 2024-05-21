@@ -9,17 +9,17 @@ import java.util.Random;
  * @package: PACKAGE_NAME
  * @className: BaseFunction
  * @author: xjm
- * @description: provide base function to system
+ * @description: 提供基本的方法
  * @date: 2024/5/20 20:26
  * @version: 1.0
  */
 public class BaseFunction {
     /**
-     * @param numbits: numBits – maximum bitLength of the new BigInteger
+     * @param numbits: 随机数长度
      * @return BigInteger
      * @author xjm
-     * @description TODO
-     * @date 2024/5/20 20:27
+     * @description 生成指定长度的随机数
+     * @date 2024/5/21 21:24
      */
     public static BigInteger getRndBigIntger(int numbits) {
         Random rnd = new Random();
@@ -27,11 +27,11 @@ public class BaseFunction {
     }
 
     /**
-     * @param bitLength:
+     * @param bitLength: 强素数长度
      * @return BigInteger
      * @author xjm
-     * @description TODO
-     * @date 2024/5/20 20:29
+     * @description 生成指定长度的强素数
+     * @date 2024/5/21 21:25
      */
     public static BigInteger getStrongPrime (int bitLength){
         Random random = new Random();
@@ -42,10 +42,17 @@ public class BaseFunction {
             }
         }
     }
+    /**
+     * @param baseNumList: 底数列表
+     * @param exponentList: 指数列表
+     * @param m: 模数
+     * @return BigInteger
+     * @author xjm
+     * @description 计算D
+     * @date 2024/5/21 21:25
+     */
     public static BigInteger caculateD(ArrayList<BigInteger> baseNumList, ArrayList<BigInteger> exponentList, BigInteger m){
-        //异常处理部分------之后补
 
-        //计算部分
         BigInteger J = baseNumList.getFirst();
         for (int i = 0; i < exponentList.size(); i++) {
             J = J.parallelMultiply(baseNumList.get(i+1).modPow(exponentList.get(i),m));
@@ -53,11 +60,11 @@ public class BaseFunction {
         return  J.mod(m);
     }
     /**
-     * @param message:
+     * @param message: 消息
      * @return BigInteger
      * @author xjm
-     * @description TODO
-     * @date 2024/5/20 20:28
+     * @description 生成摘要
+     * @date 2024/5/21 21:26
      */
     public static BigInteger getHash(BigInteger message) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
@@ -68,12 +75,12 @@ public class BaseFunction {
     }
 
     /**
-     * @param baseNumList:
-     * @param exponentList:
-     * @param m:
+     * @param baseNumList:底数列表
+     * @param exponentList:指数列表
+     * @param m:模数
      * @return BigInteger
      * @author xjm
-     * @description TODO
+     * @description 计算模式一 型如  ax^x*as^s*...h^w
      * @date 2024/5/20 20:43
      */
     public static BigInteger caculateT_P1(ArrayList<BigInteger> baseNumList,ArrayList<BigInteger> exponentList,BigInteger m){
@@ -95,7 +102,7 @@ public class BaseFunction {
      * @param m: 模数
      * @return BigInteger
      * @author xjm
-     * @description 挑战计算模式二 型如  A^ry/(ax^x*as^s*....)的挑战
+     * @description 计算模式二 型如  A^ry/(ax^x*as^s*....)
      * @date 5/12/2024 9:22 PM
      */
     public static BigInteger caculateT_P2(ArrayList<BigInteger> baseNumList,ArrayList<BigInteger> exponentList,BigInteger m){
@@ -113,6 +120,13 @@ public class BaseFunction {
         BigInteger invPart = caculateT_P1(baseNumSubList,exponentSubList,m).modInverse(m);
         return T.multiply(invPart).mod(m);
     }
+    /**
+     * @param secParamList: 秘密参数的二维列表
+     * @return ArrayList<ArrayList<BigInteger>>
+     * @author xjm
+     * @description 生成随机参数r,形式为二维列表
+     * @date 2024/5/21 21:26
+     */
     public static ArrayList<ArrayList<BigInteger>>generateRList(ArrayList<ArrayList<BigInteger>> secParamList){
         ArrayList<ArrayList<BigInteger>> rList = new ArrayList<>();
         for (int i = 0; i < secParamList.size(); i++) {
@@ -124,6 +138,15 @@ public class BaseFunction {
         }
         return rList;
     }
+    /**
+     * @param rList: 随机数的二维列表
+     * @param secParamList: 秘密参数的二维列表
+     * @param c: 摘要
+     * @return ArrayList<ArrayList<BigInteger>>
+     * @author xjm
+     * @description 计算出S,形式为二维列表
+     * @date 2024/5/21 21:27
+     */
     public static ArrayList<ArrayList<BigInteger>> caculateSList(ArrayList<ArrayList<BigInteger>> rList,ArrayList<ArrayList<BigInteger>> secParamList,BigInteger c)
     {
         ArrayList<ArrayList<BigInteger>> sList  = new ArrayList<ArrayList<BigInteger>>();

@@ -7,7 +7,7 @@ import java.math.BigInteger;
  * @package: POJO
  * @className: ServerParameterToClientTwoBean
  * @author: xjm
- * @description: TODO
+ * @description: 存放服务器第二次向服务器传递的所有参数,包括（y',AD）
  * @date: 2024/5/21 17:14
  * @version: 1.0
  */

@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * @package: POJO
  * @className: ClientKnowledgeSignatureOneBean
  * @author: xjm
- * @description:
+ * @description: 存放  客户端  知识签名
  * @date: 2024/5/20 20:09
  * @version: 1.0
  */
